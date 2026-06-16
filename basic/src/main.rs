@@ -1,9 +1,7 @@
 use basic::algo::array;
 
 fn main() { 
-    let mut v = vec![1, 2, 3, 4, 5, 6, 6];
-    array::rotate(&mut v, 3);
-    for elm in v {
-        print!("{elm} ");
-    }
+    let mut v = vec![4, 7, 19, 16];
+    let ops = array::min_ops(&v, 3);
+    println!("{ops}");
 }

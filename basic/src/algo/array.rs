@@ -3,16 +3,16 @@ pub fn hello(){
     }
 
 // This is get alternate algo's recursive version which return an array of alternating elements
-fn getAlternateRec(arr: &Vec<isize>, idx: usize, res: &mut Vec<isize>) {
+fn get_alternate_rec(arr: &Vec<isize>, idx: usize, res: &mut Vec<isize>) {
     if idx < arr.len() {
         res.push(arr[idx]);
-        getAlternateRec(&arr, idx + 2, res);
+        get_alternate_rec(&arr, idx + 2, res);
     }
 }
 
-pub fn getAlternate(arr: Vec<isize>) -> Vec<isize> {
+pub fn get_alternate(arr: Vec<isize>) -> Vec<isize> {
     let mut res = Vec::new();
-    getAlternateRec(&arr, 0, &mut res);
+    get_alternate_rec(&arr, 0, &mut res);
     res
 }
 
@@ -89,13 +89,99 @@ pub fn reverse<T: Clone>(arr: &mut [T]) {
     }
 }
 
-// TODO: rotating an array by n
-pub fn rotate<T: Clone>(arr: &mut Vec<T>, mut steps: usize) -> &mut Vec<T> {
+// Rotating an array by n steps.
+
+pub fn rotate<T: Clone>(arr: &mut Vec<T>, steps: usize) {
     reverse(arr);
     reverse(&mut arr[..steps]);
     reverse(&mut arr[steps..]);
-    arr
 }
+
+// a generic case for push zeros to end here we are pushing any number specified to the end.
+// can be improved by thinking other way around 
+/*
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void pushZerosToEnd(vector<int>& arr) {
+    int count = 0;
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] != 0) {
+            swap(arr[i], arr[count]);
+            count++;
+        }
+    }
+}
+*/
+// above code is copy pasted from gfg. This is better version of the implementation below refer it.
+pub fn push_all_to_end(arr: &mut [usize], num: usize) {
+    let mut i = 0;
+    let mut idr = None; // idex element to be replaced.
+    let end_idx = arr.len()-1;
+    while i != end_idx {
+        if arr[i] == num {
+            if i < end_idx && arr[i+1] != num {
+                match idr {
+                    None => {
+                        arr[i] = arr[i+1];
+                        arr[i+1] = num;
+                        i += 1;
+                    },
+                    Some(x) => {
+                        arr[x] = arr[i+1];
+                        arr[i+1] = num;
+                        let Some(v) = idr else { panic!() };
+                        if i > v && arr[v+1] == num { idr = Some(v+1) } else { idr = Some(i); }
+                        i += 1;
+                    }
+                }
+              } else {
+                match idr {
+                    None => {
+                        idr = Some(i);
+                        i += 1;
+                    },
+                    Some(_) => {
+                        i += 1;
+                        continue;
+                    }
+                }
+            }
+            
+        } else {
+            i += 1;
+            continue;
+        }
+    }
+}
+
+// min operation by k value to make all equal.
+/* here we need to make all elements of array equal and find the number of operations required to do by the value k
+ if not possible we need to return -1.
+*/
+
+pub fn min_ops(arr: &[usize], k: usize) -> isize {
+    let mut max = arr[0];
+    let m = arr[0] % k;
+    let mut ops = 0;
+    for el in arr {
+        if *el % k != m { return -1; }
+        if *el > max { max = *el; }
+    }
+    for el in arr {
+        let mut v = *el;
+        while v != max {
+            v += k;
+            ops += 1;
+        }
+    }
+    ops
+}
+
+
+
+
 // -------------------------------------------------------------------
 #[cfg(test)]
 mod tests {
@@ -105,7 +191,7 @@ mod tests {
     fn test_get_alternate(){
         let v = vec![1, 2, 3, 4, 5];
         let res = vec![1, 3, 5];
-        assert_eq!(getAlternate(v), res);
+        assert_eq!(get_alternate(v), res);
     }
     #[test]
     fn test_leader(){
@@ -134,6 +220,14 @@ mod tests {
         let mut v = vec![1, 2, 3, 4, 5, 6];
         let res = vec![4, 5, 6, 1, 2, 3];
         rotate(&mut v, 3);
+        assert_eq!(v, res);
+    }
+
+    #[test]
+    fn test_push_end(){
+        let mut v = vec![1, 2, 3, 3, 4, 5, 3];
+        let res = vec![1, 2, 4, 5, 3, 3, 3];
+        push_all_to_end(&mut v, 3);
         assert_eq!(v, res);
     }
 }
