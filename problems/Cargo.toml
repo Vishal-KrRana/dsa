@@ -1,0 +1,14 @@
+[package]
+name = "problems"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+easy = { path = "./easy" }
+medium = { path = "./medium" }
+hard = { path = "./hard" }
+
+[workspace]
+resolver = "3"
+member = ["easy", "medium", "hard"]
+members = ["easy", "hard", "medium"]
