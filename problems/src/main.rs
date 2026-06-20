@@ -1,9 +1,8 @@
-use easy::*;
+use easy::array::*;
 
 
 fn main() {
-    let u = vec![100, 180, 260, 310, 40, 535, 695];
-    let v = [4, 2];
-    let profit = max_profit(&v);
-    println!("profit: {profit}");
+    let v = [1, 2, 3, 4, 6, 7];
+    let u = [7, 6, 5, 3, 2, 1];
+    println!("res: {}, {}", missing_num(&u), missing_num(&v));
 }
