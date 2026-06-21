@@ -179,7 +179,54 @@ pub fn min_ops(arr: &[usize], k: usize) -> isize {
     ops
 }
 
+pub fn binary_search(arr: &[usize], target: usize) -> Option<usize> {
+    let mut i = 0;
+    let mut j = arr.len() - 1;
+    while i<j {
+        let mid = i + (j - i)/ 2;
+        if arr[mid] == target { return Some(target); }
+        if arr[mid] < target {
+            i = mid + 1;
+        }else {
+            j = mid - 1;
+        }
+    }
+    None
+}
 
+pub fn selection_sort(arr: &mut [usize]){
+    let mut i = 0;
+    while i < arr.len() {
+        let mut j = i;
+        while j < arr.len() {
+            if arr[i] >= arr[j] {
+                let temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+            j += 1;
+        }
+        i += 1;
+    }
+}
+
+pub fn insertion_sort(arr: &mut [usize]) {
+    let mut i = 1;
+    while i < arr.len() {
+        let mut j = 0;
+        'l2:
+        while j < i {
+            if arr[i] <= arr[j] {
+                let temp = arr[j];
+                arr[j] = arr[i];
+                arr[i] = temp;
+                break 'l2;
+            }
+            j += 1;
+        }
+        i += 1;
+    }
+}
 
 
 // -------------------------------------------------------------------
